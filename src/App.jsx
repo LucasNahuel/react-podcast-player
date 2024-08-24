@@ -54,32 +54,32 @@ function App() {
       subtitle: "Sufian Aly",
       title: "Listen Again",
       items: [
-        <PlaylistCard playlist={{type: "playlistCard", cover: pl1, name: "Playlist Name", songCount: 68, artist: "Artist Name"}}></PlaylistCard>,
-        <SongCard song={{type: "songCard", cover: s1, name: "Song Title", author: "Channel/Artist", views: "450M"}}></SongCard>,
-        <PlaylistCard playlist={{type: "playlistCard", cover: pl2, name: "Playlist Name", songCount: 68, artist: "Artist Name"}}></PlaylistCard>,
-        <PlaylistCard playlist={{type: "playlistCard", cover: pl3, name: "Playlist Name", songCount: 68, artist: "Artist Name"}}></PlaylistCard>,
-        <PlaylistCard playlist={{type: "playlistCard", cover: pl4, name: "Playlist Name", songCount: 68, artist: "Artist Name"}}></PlaylistCard>
+        {type: "playlistCard", cover: pl1, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
+        {type: "songCard", cover: s1, name: "Song Title", author: "Channel/Artist", views: "450M"},
+        {type: "playlistCard", cover: pl2, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
+        {type: "playlistCard", cover: pl3, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
+        {type: "playlistCard", cover: pl4, name: "Playlist Name", songCount: 68, artist: "Artist Name"}
       ]
     },
     similarToCarousel : {
       subtitle: "SIMILAR TO",
       title: "Akon",
       items: [
-        <ArtistCard artist={{cover: artist1, title: "Listen again", subtitle: "4.53M subscribers"}}></ArtistCard>,
-        <ArtistCard artist={{cover: artist2, title: "Listen again", subtitle: "4.53M subscribers"}}></ArtistCard>,
-        <ArtistCard artist={{cover: artist3, title: "Listen again", subtitle: "4.53M subscribers"}}></ArtistCard>,
-        <ArtistCard artist={{cover: artist4, title: "Listen again", subtitle: "4.53M subscribers"}}></ArtistCard>,
-        <ArtistCard artist={{cover: artist5, title: "Listen again", subtitle: "4.53M subscribers"}}></ArtistCard>
+        {type: "artistCard", cover: artist1, title: "Listen again", subtitle: "4.53M subscribers"},
+        {type: "artistCard", cover: artist2, title: "Listen again", subtitle: "4.53M subscribers"},
+        {type: "artistCard", cover: artist3, title: "Listen again", subtitle: "4.53M subscribers"},
+        {type: "artistCard", cover: artist4, title: "Listen again", subtitle: "4.53M subscribers"},
+        {type: "artistCard", cover: artist5, title: "Listen again", subtitle: "4.53M subscribers"}
       ]
     },
     recommendedAlbumCarousel : {
       title: "Recommended albums",
       items: [
-        <AlbumCard album={{title: "Listen Again", cover: album2}}></AlbumCard>,
-        <AlbumCard album={{title: "Listen Again", cover: album3}}></AlbumCard>,
-        <AlbumCard album={{title: "Listen Again", cover: album4}}></AlbumCard>,
-        <AlbumCard album={{title: "Listen Again", cover: album5}}></AlbumCard>,
-        <AlbumCard album={{title: "Listen Again", cover: album1}}></AlbumCard>
+        {type: "albumCard", title: "Listen Again", cover: album2},
+        {type: "albumCard", title: "Listen Again", cover: album3},
+        {type: "albumCard", title: "Listen Again", cover: album4},
+        {type: "albumCard", title: "Listen Again", cover: album5},
+        {type: "albumCard", title: "Listen Again", cover: album1}
       ]
     },
     quickPicksCarousel : {
@@ -87,7 +87,7 @@ function App() {
       subtitle: "START RADIO FROM A SONG",
       isSongList: true,
       items: [
-        <SongList songs={[
+         { type: "songList", songs:[
           {cover: song1, title: "Happy", author: "Robbie Williams · Listen Again"},
           {cover: song2, title: "Love Story", author: "John Lennon (of the Beatles)"},
           {cover: song3, title: "Smooth", author: "Coldplay (fronted by Chris)"},
@@ -104,18 +104,20 @@ function App() {
           {cover: song14, title: "Can's Stop This Feeling!", author: "Calvin Harris (singer and producer)"},
           {cover: song15, title: "Stitches", author: "Peter Gabriel · Listen Again"},
           {cover: song16, title: "Rolling in the Deep", author: "Adele · Listen Again"},
-        ]}></SongList>
+         ]
+        }
       ]
     }
   }
-
   return (
+    
     <>
+
       <Header></Header>
       <div style={{display: "flex", flexDirection: "row", alignItems: "top", minHeight: "100vh"}}>
         <Sidebar></Sidebar>
 
-        <div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", marginBottom: "100px"}}>
+        <div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", margin:"0 auto", marginBottom: "100px"}}>
           <Chiplist></Chiplist>
 
           <Carousel carousel={data.listenAgainCarousel}></Carousel>
