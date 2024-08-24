@@ -2,26 +2,34 @@
 
 function Sidebar(props){
 
+    let menuItems = [];
+
+    for( let i = 0; i < 3; i++){
+        menuItems.push(
+            <a className="menu-item" style={{flexDirection: props.isSidebarOpen ? "row" : "column", width: props.isSidebarOpen ? "100%" : "fit-content", gap: props.isSidebarOpen ? "1.5em" : "0"}}>
+                <span class="material-symbols-sharp">
+                group
+                </span>
+                Home
+            </a>
+        )
+    }
+
     return(
-        <div className="sidebar">
-            <a className="menu-item" style={{backgroundColor: "#222222"}}>
+        <div className="sidebar" style={{width: props.isSidebarOpen ? "333px" : "88px"}}>
+            
+
+            {menuItems}
+           
+
+           <button className="round-button">
                 <span class="material-symbols-sharp">
-                group
+                add
                 </span>
-                Home
-            </a>
-            <a className="menu-item">
-                <span class="material-symbols-sharp">
-                group
-                </span>
-                Home
-            </a>
-            <a className="menu-item">
-                <span class="material-symbols-sharp">
-                group
-                </span>
-                Home
-            </a>
+                
+                {props.isSidebarOpen ? "New Playlist" : ""}
+           </button>
+            
         </div>
     )
 }

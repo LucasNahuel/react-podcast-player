@@ -6,7 +6,7 @@ function Header(props){
    
     return(<div className="header-root">
         <div className="menu-container">
-            <button>
+            <button onClick={props.toggleSidebar}>
                 <span className="material-symbols-sharp">
                 menu
                 </span>

@@ -47,7 +47,15 @@ import song16 from './assets/images/song16.png'
 
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isSidebarOpen, setSidebarOpen] = useState(false)
+
+
+  const toggleSidebar = () => {
+    setSidebarOpen( (isSidebarOpen) => {
+      return !isSidebarOpen
+    });
+  }
+  
 
   const data = {
     listenAgainCarousel : {
@@ -113,9 +121,9 @@ function App() {
     
     <>
 
-      <Header></Header>
+      <Header toggleSidebar={toggleSidebar}></Header>
       <div style={{display: "flex", flexDirection: "row", alignItems: "top", minHeight: "100vh"}}>
-        <Sidebar></Sidebar>
+        <Sidebar isSidebarOpen={isSidebarOpen}></Sidebar>
 
         <div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", margin:"0 auto", marginBottom: "100px"}}>
           <Chiplist></Chiplist>
