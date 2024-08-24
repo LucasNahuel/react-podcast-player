@@ -1,6 +1,9 @@
 import pp from "../assets/images/pp.png"
 import PlaylistCard from "./PlaylistCard";
 import SongCard from "./SongCard";
+import AlbumCard from "./AlbumCard";
+import ArtistCard from "./ArtistCard";
+import SongList from "./SongList";
 
 function Carousel(props){
     return(
@@ -47,7 +50,20 @@ function Carousel(props){
 
             <div className="carousel-body">
                 {
-                    props.carousel.items
+                    props.carousel.items.map(i => {
+                        if(i.type == "playlistCard"){
+                            return <PlaylistCard playlist={i}></PlaylistCard>
+                        }else if(i.type == "songCard"){
+                            return <SongCard song={i}></SongCard>
+                        }else if(i.type == "albumCard"){
+                            return <AlbumCard album={i}></AlbumCard>
+                        }else if(i.type == "artistCard"){
+                            return <ArtistCard artist={i}></ArtistCard>
+                        }else{
+                            return <SongList songs={i.songs}></SongList>
+                        }
+                    }
+                    )
                 }
             </div>
             
