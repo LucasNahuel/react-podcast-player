@@ -1,4 +1,4 @@
-
+import imgPlaceholder from '../assets/images/img-placeholder.jpg';
 
 function Sidebar(props){
 
@@ -21,14 +21,28 @@ function Sidebar(props){
 
             {menuItems}
            
+           <hr style={{width: "100%", height: "1px", marginBlockEnd: "1.5em", borderColor: "rgb(48, 48, 48)"}}></hr>
 
-           <button className="round-button">
+           <button className="round-button" onClick={() => props.changeLocation("playlistCreate")}>
                 <span class="material-symbols-sharp">
                 add
                 </span>
                 
                 {props.isSidebarOpen ? "New Playlist" : ""}
            </button>
+
+            <div className="sidebar-playlist">
+
+                {props.playListList.map(i => 
+                <div className="song-list-item">
+                        <img src={i.cover ? i.cover : imgPlaceholder}></img>
+                        <div>
+                            <p>{i.name}</p>
+                            <p>{i.description}</p>
+                        </div>
+                    </div>
+                )}
+            </div>
             
         </div>
     )

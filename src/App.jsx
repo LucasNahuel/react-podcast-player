@@ -43,17 +43,52 @@ import song13 from './assets/images/song13.png'
 import song14 from './assets/images/song14.png'
 import song15 from './assets/images/song15.png'
 import song16 from './assets/images/song16.png'
-
+import PlaylistCreate from './components/PlaylistCreate'
 
 
 function App() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false)
-
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [location, setLocation] = useState("home");
+  const [playListList, setPlaylistList] = useState([]);
 
   const toggleSidebar = () => {
     setSidebarOpen( (isSidebarOpen) => {
       return !isSidebarOpen
     });
+  }
+
+  const changeLocation = (newLocation) => {
+    setLocation(newLocation);
+  }
+
+  const renderLocation = () => {
+    if(location === "home"){
+      return(
+        
+        <div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", margin:"0 auto", marginBottom: "100px", width: "100%"}}>
+        
+          <Chiplist></Chiplist>
+
+          <Carousel carousel={data.listenAgainCarousel}></Carousel>
+          <Carousel carousel={data.similarToCarousel}></Carousel>
+          <Carousel carousel={data.quickPicksCarousel}></Carousel>
+          <Carousel carousel={data.recommendedAlbumCarousel}></Carousel>
+          
+        </div>
+      )
+    }else if(location === "playlistCreate"){
+      return(<div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", margin:"0 auto", marginBottom: "100px", width: "100%"}}>
+         
+          <PlaylistCreate addPlayList={addPlayList}></PlaylistCreate>
+          
+      </div>)
+    }
+  }
+
+  const addPlayList = (playlist) => {
+    console.log(playlist);
+    playListList.push(playlist);
+    setPlaylistList([...playListList]); 
   }
   
 
@@ -121,22 +156,15 @@ function App() {
     
     <>
 
-      <Header toggleSidebar={toggleSidebar}></Header>
+      <Header toggleSidebar={toggleSidebar} ></Header>
       <div style={{display: "flex", flexDirection: "row", alignItems: "top", minHeight: "100vh"}}>
-        <Sidebar isSidebarOpen={isSidebarOpen}></Sidebar>
-
-        <div style={{display: "flex", flexDirection: "column", padding: "0 2.5em", overflow: "hidden", margin:"0 auto", marginBottom: "100px"}}>
-          <Chiplist></Chiplist>
-
-          <Carousel carousel={data.listenAgainCarousel}></Carousel>
-          <Carousel carousel={data.similarToCarousel}></Carousel>
-          <Carousel carousel={data.quickPicksCarousel}></Carousel>
-          <Carousel carousel={data.recommendedAlbumCarousel}></Carousel>
-        </div>
+        <Sidebar isSidebarOpen={isSidebarOpen} changeLocation={changeLocation}  playListList={playListList}></Sidebar>
+       
+        {renderLocation()}
         
       </div>
 
-      <PlayBar></PlayBar>
+      <PlayBar></PlayBar> 
     </>
   )
 }

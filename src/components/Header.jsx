@@ -28,7 +28,7 @@ function Header(props){
                 <span className="material-symbols-sharp" style={{margin: "0 0.5em", color: "#595656"}}>
                     search
                 </span>
-                <input type='text' placeholder='Search...'>
+                <input type='text' placeholder='Search...' style={{borderLeft: "none"}}>
                 </input>
             </div>
 
