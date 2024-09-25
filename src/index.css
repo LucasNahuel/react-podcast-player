@@ -220,8 +220,8 @@ a:hover{
 }
 
 .song-list-item{
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 48px calc(100% - calc(48px + 0.5em));
   align-items: center;
   gap: 0.5em;
   overflow: hidden;
@@ -249,19 +249,8 @@ a:hover{
   margin: 0;
 }
 
-.seek-bar{
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.302);
-  width: -webkit-fill-available;
-  position: absolute;
-  inset: -2px auto auto -1.5em;
 
-}
 
-.seek-bar:hover{
-  cursor: pointer;
-  height: 4px;
-}
 
 .progressed-bar{
   background-color: #FF0000;
@@ -306,3 +295,59 @@ button:disabled{
   background-color: white !important;
   color: grey !important;
 }
+
+input[type="range"]{
+  max-width: 100vw;
+}
+
+.song-list-item img:hover{
+  opacity: 0;
+  cursor: pointer;
+}
+
+.song-list-item button:hover{
+  opacity: 1;
+  position: relative;
+}
+
+input[type="range"] {
+  /* removing default appearance */
+  position: absolute;
+  max-width: 100vw;
+  inset: -4px auto auto -1px;
+  height: 6px;
+  z-index: 999;
+  -webkit-appearance: none;
+  appearance: none; 
+  /* creating a custom design */
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  /*  slider progress trick  */
+  overflow: hidden;
+}
+
+/* Track: webkit browsers */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 15px;
+  background: #ccc;
+  border-radius: 16px;
+}
+
+
+/* Thumb: webkit */
+input[type="range"]::-webkit-slider-thumb {
+  /* removing default appearance */
+  z-index: 999;
+  appearance: none; 
+  /* creating a custom design */
+  height: 15px;
+  width: 15px;
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid red;
+  /*  slider progress trick  */
+  box-shadow: -9997px 0px 0px 9990px red;
+  z-index: 999;
+}
+

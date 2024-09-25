@@ -1,14 +1,65 @@
-import album1 from "../assets/images/album1.png"
+import album1 from "../assets/images/album1.png";
+import musicNote from "../assets/images/music_note.png"
+import { useRef, useEffect, useState } from "react";
 
 function PlayBar(props){
+
+    const audioRef = useRef(null);
+    const [audioDuration, setAudioDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handleLoadedMetadata = () => {
+        const audio = audioRef.current;
+        console.log('Duration:', audio.duration);
+        setAudioDuration(audio.duration, audio.play());
+        
+    };
+
+    const updateCurrentTime = () =>{
+        const audio = audioRef.current;
+        setCurrentTime(audio.currentTime * 1000);
+    }
+
+    const seekTime = (ev) => {
+        const audio = audioRef.current;
+        audio.currentTime = ev.target.value;
+    }
+
+    const updatePlayStatus = () =>{
+        let audio = audioRef.current;
+        setIsPlaying(!audio.paused);
+    }
+
+    useEffect(() => {
+        const audio = audioRef.current;
+
+        if (audio) {
+            audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+            audio.addEventListener('timeupdate', updateCurrentTime);
+            audio.addEventListener('play', updatePlayStatus);
+            audio.addEventListener('pause', updatePlayStatus);
+        }   
+
+        return () => {
+            if (audio) {
+                audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+                audio.removeEventListener('timeupdate', updateCurrentTime);
+            }
+        };
+    }, []);
+
+
+
     return(
         <div className="play-bar">
 
-            <div className="seek-bar">
-                <div className="progressed-bar">
-                    <div style={{backgroundColor: "inherit", width: "12px", height: "12px", borderRadius: "50%", position: "absolute", inset: "-5px 0 auto auto"}}></div>
-                </div>
-            </div>
+            
+            <audio ref={audioRef} autoPlay={false} src={props.playing ? props.playing.urls.high_mp3 : null}></audio>
+
+            <input className="seek-bar" step={0.1} type="range" min={"0"} value={currentTime/1000} max={audioDuration} onChange={seekTime} >
+                
+            </input>
 
             <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "1em"}}>
                 
@@ -18,11 +69,24 @@ function PlayBar(props){
                     </span>
                 </button>
                 
-                <button className="icon-button">
-                    <span class="material-symbols-sharp" style={{fontSize: "40px"}}>
-                    play_arrow
-                    </span>
-                </button>
+                {
+                    isPlaying ?
+                    
+                    <button className="icon-button" onClick={() => {audioRef.current.pause()}}>
+                        <span class="material-symbols-sharp" style={{fontSize: "40px"}}>
+                        pause
+                        </span>
+                    </button> 
+
+                    :
+                    <button className="icon-button" onClick={() => {audioRef.current.play()}}>
+                        <span class="material-symbols-sharp" style={{fontSize: "40px"}}>
+                        play_arrow
+                        </span>
+                    </button> 
+                    
+                }
+                
                 
                 <button className="icon-button">
                     <span class="material-symbols-sharp" style={{fontSize: "24px"}}>
@@ -30,16 +94,22 @@ function PlayBar(props){
                     </span>
                 </button>
 
-                <p style={{color: "grey"}}>0:10 / 3:41</p>
+                <p style={{color: "grey"}}>{Math.trunc(currentTime/1000/60)}:{Math.trunc(currentTime/1000%60)} / {Math.trunc(audioDuration/60)}:{Math.trunc(audioDuration%60)}</p>
             </div>
 
             <div style={{display: "flex", alignItems: "center"}}>
-                <img src={album1} style={{width: "48px", margin: "0.5em"}}></img>
 
-                <div style={{display: "flex", flexDirection: "row", maxWidth: "500px"}}>
-                    <div style={{display: "flex", flexDirection: "column", maxWidth: "407px", width: "100%", flexShrink: "0"}}>
-                        <p style={{marginBlock: "0.25em", fontWeight: "bold"}}>Can't Stop the Feeling!</p>
-                        <p style={{marginBlock: "0.25em"}}>Calvin Harris · 37K views · 603 likes</p>
+                
+                    
+
+                    { props.playing ? 
+                    <div style={{display: "flex", flexDirection: "row", maxWidth: "500px"}}>
+                    <div className="song-list-item">
+                        <img src={props.playing.channel.urls.logo_image.original ? props.playing.channel.urls.logo_image.original : musicNote}></img>
+                        <div>
+                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{props.playing.title}</p>
+                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{props.playing.description}</p>
+                        </div>
                     </div>
 
                     <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
@@ -61,9 +131,14 @@ function PlayBar(props){
                             </span>
                         </button>
 
-                        
+
+                        </div>
                     </div>
-                </div>
+                    : null
+                    }
+
+                        
+                
 
 
             </div>
