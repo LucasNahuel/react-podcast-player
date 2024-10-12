@@ -8,6 +8,8 @@ function PlayBar(props){
     const [audioDuration, setAudioDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [volume, setVolume] = useState(0.5);
+    const [audioSlideVisible, setAudioSlideVisible] = useState("hidden");
 
     const handleLoadedMetadata = () => {
         const audio = audioRef.current;
@@ -50,9 +52,20 @@ function PlayBar(props){
     }, []);
 
 
+    const handleVolume = (ev) => {
+        audioRef.current.volume = ev.target.value;
+        setVolume(ev.target.value);
+
+    }
+
+    const handleMouseEnterAudio = (val) => {
+        setAudioSlideVisible(val);
+    }
+
+
 
     return(
-        <div className="play-bar">
+        <div className="play-bar" onMouseLeave={() => handleMouseEnterAudio("hidden")}>
 
             
             <audio ref={audioRef} autoPlay={false} src={props.playing ? props.playing.urls.high_mp3 : null}></audio>
@@ -143,19 +156,26 @@ function PlayBar(props){
 
             </div>
 
-            <div style={{display: "flex", flexDirection:"row", justifyContent: "center", alignItems: "center", gap: "0.5em"}}>
+            <div style={{display: "flex", flexDirection:"row", justifyContent: "center", alignItems: "center", gap: "0.5em", position: "relative"}}>
+                
+                
+                <input type="range" value={volume} step={0.01} max={1} style={{position: "relative", width: "100px", top: "+2px", visibility: audioSlideVisible}}
+                onChange={handleVolume}></input>
+                
+                <button className="icon-button" onMouseEnter={() => handleMouseEnterAudio("visible")}>
+                    <span class="material-symbols-sharp" style={{color: "grey"}}>
+                    volume_up
+                    </span>
+
+                </button>
+                
                 <button className="icon-button">
                     <span class="material-symbols-sharp" style={{color: "grey"}}>
                     repeat
                     </span>
                 </button>
                 
-                <button className="icon-button">
-                    <span class="material-symbols-sharp" style={{color: "grey"}}>
-                    volume_up
-                    </span>
-
-                </button>
+                
                 
                 <button className="icon-button">
                     <span class="material-symbols-sharp">
@@ -164,6 +184,9 @@ function PlayBar(props){
                 </button>
                 
             </div>
+
+            
+
 
         </div>
     )
