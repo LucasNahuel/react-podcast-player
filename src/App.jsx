@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -44,12 +44,29 @@ import song14 from './assets/images/song14.png'
 import song15 from './assets/images/song15.png'
 import song16 from './assets/images/song16.png'
 import PlaylistCreate from './components/PlaylistCreate'
+import useFetch from './hooks/useFetch'
 
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [location, setLocation] = useState("home");
   const [playListList, setPlaylistList] = useState([]);
+  const {data, loading, error} = useFetch("https://api.audioboom.com/audio_clips");
+  const [playingAudio, setPlayingAudio] = useState(null);
+
+  if(error){
+    console.log(error);
+  }
+
+  if(data){
+    console.log(data);
+  }
+
+  const changeAudio = (audio) => {
+    console.log(audio);
+    setPlayingAudio(audio);
+  }
+
 
   const toggleSidebar = () => {
     setSidebarOpen( (isSidebarOpen) => {
@@ -69,10 +86,14 @@ function App() {
         
           <Chiplist></Chiplist>
 
-          <Carousel carousel={data.listenAgainCarousel}></Carousel>
-          <Carousel carousel={data.similarToCarousel}></Carousel>
-          <Carousel carousel={data.quickPicksCarousel}></Carousel>
-          <Carousel carousel={data.recommendedAlbumCarousel}></Carousel>
+          <div style={{height: "4em"}}></div>
+
+          {data ? <SongList
+            songs={data.body.audio_clips}
+            changeAudio={changeAudio}
+          ></SongList>
+ : null}
+
           
         </div>
       )
@@ -92,66 +113,6 @@ function App() {
   }
   
 
-  const data = {
-    listenAgainCarousel : {
-      subtitle: "Sufian Aly",
-      title: "Listen Again",
-      items: [
-        {type: "playlistCard", cover: pl1, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
-        {type: "songCard", cover: s1, name: "Song Title", author: "Channel/Artist", views: "450M"},
-        {type: "playlistCard", cover: pl2, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
-        {type: "playlistCard", cover: pl3, name: "Playlist Name", songCount: 68, artist: "Artist Name"},
-        {type: "playlistCard", cover: pl4, name: "Playlist Name", songCount: 68, artist: "Artist Name"}
-      ]
-    },
-    similarToCarousel : {
-      subtitle: "SIMILAR TO",
-      title: "Akon",
-      items: [
-        {type: "artistCard", cover: artist1, title: "Listen again", subtitle: "4.53M subscribers"},
-        {type: "artistCard", cover: artist2, title: "Listen again", subtitle: "4.53M subscribers"},
-        {type: "artistCard", cover: artist3, title: "Listen again", subtitle: "4.53M subscribers"},
-        {type: "artistCard", cover: artist4, title: "Listen again", subtitle: "4.53M subscribers"},
-        {type: "artistCard", cover: artist5, title: "Listen again", subtitle: "4.53M subscribers"}
-      ]
-    },
-    recommendedAlbumCarousel : {
-      title: "Recommended albums",
-      items: [
-        {type: "albumCard", title: "Listen Again", cover: album2},
-        {type: "albumCard", title: "Listen Again", cover: album3},
-        {type: "albumCard", title: "Listen Again", cover: album4},
-        {type: "albumCard", title: "Listen Again", cover: album5},
-        {type: "albumCard", title: "Listen Again", cover: album1}
-      ]
-    },
-    quickPicksCarousel : {
-      title: "Quick picks",
-      subtitle: "START RADIO FROM A SONG",
-      isSongList: true,
-      items: [
-         { type: "songList", songs:[
-          {cover: song1, title: "Happy", author: "Robbie Williams · Listen Again"},
-          {cover: song2, title: "Love Story", author: "John Lennon (of the Beatles)"},
-          {cover: song3, title: "Smooth", author: "Coldplay (fronted by Chris)"},
-          {cover: song4, title: "Hey, Soul Sister", author: "Sam Smith · Listen Again"},
-          {cover: song5, title: "Cheap Thrills", author: "Jessie J · Listen Again"},
-          {cover: song6, title: "I Will Always Love You", author: "Coldplay (fronted by Chris)"},
-          {cover: song7, title: "I Gotta Feeling", author: "George Michael (of Wham!)"},
-          {cover: song8, title: "Someone Like You", author: "Elton John · Listen Again"},
-          {cover: song9, title: "Royals", author: "Florence Welch (of Florence Welch)"},
-          {cover: song10, title: "Radioactive", author: "Listen Again · Listen Again"},
-          {cover: song11, title: "Say Something", author: "Listen Again · Listen Again"},
-          {cover: song12, title: "Halo", author: "Ellie Goulding · Listen Again"},
-          {cover: song13, title: "Havana", author: "Annie Lennox (of Eurythmic)"},
-          {cover: song14, title: "Can's Stop This Feeling!", author: "Calvin Harris (singer and producer)"},
-          {cover: song15, title: "Stitches", author: "Peter Gabriel · Listen Again"},
-          {cover: song16, title: "Rolling in the Deep", author: "Adele · Listen Again"},
-         ]
-        }
-      ]
-    }
-  }
   return (
     
     <>
@@ -164,7 +125,7 @@ function App() {
         
       </div>
 
-      <PlayBar></PlayBar> 
+      <PlayBar playing={playingAudio}></PlayBar> 
     </>
   )
 }
