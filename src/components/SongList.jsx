@@ -1,7 +1,11 @@
 
+import { useContext } from "react";
 import musicNote from '../assets/images/music_note.png'
 
+
 function SongList(props){
+
+
     return(
         <div className="song-grid">
             {

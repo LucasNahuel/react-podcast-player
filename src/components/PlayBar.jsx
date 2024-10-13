@@ -1,6 +1,7 @@
 import album1 from "../assets/images/album1.png";
 import musicNote from "../assets/images/music_note.png"
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
+import { PlayingContext } from "../providers/PlayingContext";
 
 function PlayBar(props){
 
@@ -10,6 +11,7 @@ function PlayBar(props){
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
     const [audioSlideVisible, setAudioSlideVisible] = useState("hidden");
+    const playingContext = useContext(PlayingContext);
 
     const handleLoadedMetadata = () => {
         const audio = audioRef.current;
@@ -68,12 +70,11 @@ function PlayBar(props){
         <div className="play-bar" onMouseLeave={() => handleMouseEnterAudio("hidden")}>
 
             
-            <audio ref={audioRef} autoPlay={false} src={props.playing ? props.playing.urls.high_mp3 : null}></audio>
+            <audio ref={audioRef} autoPlay={false} src={playingContext ? playingContext.urls.high_mp3 : null}></audio>
 
             <input className="seek-bar" step={0.1} type="range" min={"0"} value={currentTime/1000} max={audioDuration} onChange={seekTime} >
                 
             </input>
-
             <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "1em"}}>
                 
                 <button className="icon-button">
@@ -115,13 +116,13 @@ function PlayBar(props){
                 
                     
 
-                    { props.playing ? 
+                    { playingContext ? 
                     <div style={{display: "flex", flexDirection: "row", maxWidth: "500px"}}>
                     <div className="song-list-item">
-                        <img src={props.playing.channel.urls.logo_image.original ? props.playing.channel.urls.logo_image.original : musicNote}></img>
+                        <img src={playingContext.channel.urls.logo_image.original ? playingContext.channel.urls.logo_image.original : musicNote}></img>
                         <div>
-                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{props.playing.title}</p>
-                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{props.playing.description}</p>
+                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{playingContext.title}</p>
+                            <p style={{overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", webkitLineClamp: "3"}}>{playingContext.description}</p>
                         </div>
                     </div>
 
