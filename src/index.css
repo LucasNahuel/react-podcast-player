@@ -210,6 +210,7 @@ a:hover{
   background-color: #282828;
   padding: 0 1.5em;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .song-grid{

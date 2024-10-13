@@ -17,6 +17,7 @@ function App() {
   const [playListList, setPlaylistList] = useState([]);
   const {data, loading, error} = useFetch("https://api.audioboom.com/audio_clips");
   const [playingAudio, setPlayingAudio] = useState(null);
+  const [isAudioPaused, setAudioPaused] = useState(false);
 
   if(error){
     console.log(error);
@@ -27,8 +28,12 @@ function App() {
   }
 
   const changeAudio = (audio) => {
-    console.log(audio);
     setPlayingAudio(audio);
+  }
+
+  const toggleAudioPause = () => {
+    console.log(!isAudioPaused);
+    setAudioPaused(!isAudioPaused);
   }
 
 
@@ -54,6 +59,8 @@ function App() {
           {data ?<SongList
             songs={data.body.audio_clips}
             changeAudio={changeAudio}
+            toggleAudioPause={toggleAudioPause}
+            isAudioPaused={isAudioPaused}
           ></SongList>
  : null}
 
@@ -74,6 +81,8 @@ function App() {
     playListList.push(playlist);
     setPlaylistList([...playListList]); 
   }
+
+
   
 
   return (
@@ -88,7 +97,7 @@ function App() {
           
         </div>
 
-        <PlayBar ></PlayBar> 
+        <PlayBar isAudioPaused={isAudioPaused} toggleAudioPause={toggleAudioPause}></PlayBar> 
       </PlayingContext.Provider>
     </>
   )

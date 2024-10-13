@@ -8,17 +8,17 @@ function PlayBar(props){
     const audioRef = useRef(null);
     const [audioDuration, setAudioDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
-    const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(0.5);
     const [audioSlideVisible, setAudioSlideVisible] = useState("hidden");
     const playingContext = useContext(PlayingContext);
+    const [playbarHeight, setPlaybarHeight] = useState("78px");
 
     const handleLoadedMetadata = () => {
         const audio = audioRef.current;
         console.log('Duration:', audio.duration);
         setAudioDuration(audio.duration, audio.play());
         
-    };
+    }
 
     const updateCurrentTime = () =>{
         const audio = audioRef.current;
@@ -32,7 +32,7 @@ function PlayBar(props){
 
     const updatePlayStatus = () =>{
         let audio = audioRef.current;
-        setIsPlaying(!audio.paused);
+        props.toggleAudioPause;
     }
 
     useEffect(() => {
@@ -53,6 +53,14 @@ function PlayBar(props){
         };
     }, []);
 
+    useEffect( () => {
+        if(props.isAudioPaused == true){
+            audioRef.current.pause();
+        }else{
+            audioRef.current.play();
+        }
+    }, [props.isAudioPaused])
+
 
     const handleVolume = (ev) => {
         audioRef.current.volume = ev.target.value;
@@ -67,7 +75,7 @@ function PlayBar(props){
 
 
     return(
-        <div className="play-bar" onMouseLeave={() => handleMouseEnterAudio("hidden")}>
+        <div className="play-bar" onMouseLeave={() => handleMouseEnterAudio("hidden")} style={{height: playbarHeight}}>
 
             
             <audio ref={audioRef} autoPlay={false} src={playingContext ? playingContext.urls.high_mp3 : null}></audio>
@@ -84,16 +92,16 @@ function PlayBar(props){
                 </button>
                 
                 {
-                    isPlaying ?
+                    !props.isAudioPaused ?
                     
-                    <button className="icon-button" onClick={() => {audioRef.current.pause()}}>
+                    <button className="icon-button" onClick={() => {props.toggleAudioPause()}}>
                         <span class="material-symbols-sharp" style={{fontSize: "40px"}}>
                         pause
                         </span>
                     </button> 
 
                     :
-                    <button className="icon-button" onClick={() => {audioRef.current.play()}}>
+                    <button className="icon-button" onClick={() => {props.toggleAudioPause()}}>
                         <span class="material-symbols-sharp" style={{fontSize: "40px"}}>
                         play_arrow
                         </span>
@@ -179,7 +187,7 @@ function PlayBar(props){
                 
                 
                 <button className="icon-button">
-                    <span class="material-symbols-sharp">
+                    <span class="material-symbols-sharp" onClick={() => setPlaybarHeight("0px")}>
                     arrow_drop_down
                     </span>
                 </button>
